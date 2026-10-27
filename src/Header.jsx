@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Moon from "./assets/icons/moon.svg";
 import Logo from "./assets/logo.svg";
 import Ring from "./assets/ring.svg";
 import ShoppingCard from "./assets/shopping-cart.svg";
 import CardDetails from "./cinema/CardDetails";
+import { MovieContext } from "./context";
 
 export default function Header() {
   const [showModal, setShowModal] = useState(false);
-
+  const { cardDate } = useContext(MovieContext);
+  console.log(cardDate);
   function handleCardShow() {
     setShowModal(true);
   }
@@ -48,6 +50,11 @@ export default function Header() {
                 height="24"
                 alt="shoppingCard"
               />
+              {cardDate.length > 0 && (
+                <span className="rounded-full absolute top-[-12px] left-[28px] bg-[#12CF6F] text-white text-center p-[2px] w-[30px] h-[30px]">
+                  {cardDate.length}
+                </span>
+              )}
             </a>
           </li>
         </ul>

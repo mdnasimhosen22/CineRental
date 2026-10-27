@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { MovieContext } from "../context";
 import { getImgUrl } from "../utils/cinema-utility";
 import MovieDetailsModal from "./MovieDetailsModal";
 import Rating from "./Rating";
@@ -6,6 +7,21 @@ import Rating from "./Rating";
 export default function MovieCard({ movie }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const { cardDate, setCardData } = useContext(MovieContext);
+  function handleAddToCard(e, movie) {
+    e.stopPropagation();
+    console.log(cardDate);
+    const found = cardDate.find((item) => {
+      return item.id === movie.id;
+    });
+    if (!found) {
+      setCardData([...cardDate, movie]);
+    } else {
+      console.error(
+        `The movie ${movie.title} has been added to the card already`,
+      );
+    }
+  }
   function handleModalClose() {
     setSelectedMovie(null);
     setShowModal(false);
@@ -17,7 +33,11 @@ export default function MovieCard({ movie }) {
   return (
     <>
       {showModal && (
-        <MovieDetailsModal movie={selectedMovie} onClose={handleModalClose} />
+        <MovieDetailsModal
+          movie={selectedMovie}
+          onClose={handleModalClose}
+          onAddToCard={handleAddToCard}
+        />
       )}
       <figure className="p-4 border border-black/10 shadow-sm dark:border-white/10 rounded-xl">
         <div
@@ -39,8 +59,7 @@ export default function MovieCard({ movie }) {
               type="button"
               className="w-full bg-primary rounded-lg py-2 px-5 flex items-center justify-center gap-2 text-[#171923] font-semibold text-sm"
               onClick={(e) => {
-                e.stopPropagation(); // modal khulbe na
-                // add to cart logic ekhane
+                handleAddToCard(e, movie);
               }}
             >
               <img src="./assets/tag.svg" alt="" />
