@@ -1,9 +1,9 @@
 import { useContext, useState } from "react";
+import { toast } from "react-toastify";
 import { MovieContext } from "../context";
 import { getImgUrl } from "../utils/cinema-utility";
 import MovieDetailsModal from "./MovieDetailsModal";
 import Rating from "./Rating";
-
 export default function MovieCard({ movie }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -16,9 +16,15 @@ export default function MovieCard({ movie }) {
     });
     if (!found) {
       setCardData([...cardDate, movie]);
+      toast.success(`Movie ${movie.title} added successfy`, {
+        position: "bottom-right",
+      });
     } else {
-      console.error(
+      toast.error(
         `The movie ${movie.title} has been added to the card already`,
+        {
+          position: "bottom-right",
+        },
       );
     }
   }
